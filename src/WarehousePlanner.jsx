@@ -60,8 +60,7 @@ function Warehouse3DView({ inputs, numberOfRackRows, rackCountPerRow, rackLength
 }
 
 // Write this code to file
-with open("/mnt/data/warehouse-planner-final/src/WarehousePlanner.jsx", "w") as f:
-    f.write(canvas_code)
+
 
 # Zip the final directory
 shutil.make_archive("/mnt/data/warehouse-planner-final", 'zip', "/mnt/data/warehouse-planner-final")
