@@ -1,4 +1,4 @@
-// src/WarehousePlanner.jsx
+
 import React from 'react';
 
 export default function WarehousePlanner() {
