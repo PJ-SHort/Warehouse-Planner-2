@@ -59,10 +59,7 @@ function Warehouse3DView({ inputs, numberOfRackRows, rackCountPerRow, rackLength
   return <div ref={mountRef} style={{ width: '100%', height: '400px' }} />;
 }
 
-// Write this code to file
-
 export default function WarehousePlanner() {
-  ...
-}
+
 
 
