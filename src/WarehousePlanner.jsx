@@ -62,7 +62,4 @@ function Warehouse3DView({ inputs, numberOfRackRows, rackCountPerRow, rackLength
 // Write this code to file
 
 
-# Zip the final directory
-shutil.make_archive("/mnt/data/warehouse-planner-final", 'zip', "/mnt/data/warehouse-planner-final")
 
-"/mnt/data/warehouse-planner-final.zip"
