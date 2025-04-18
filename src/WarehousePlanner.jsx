@@ -109,9 +109,9 @@ export default function WarehousePlanner() {
 
   const usableLength = inputs.buildingLength - aisleFt;
   const usableWidth = inputs.buildingWidth - intersectingFt;
-
   const rackCountPerRow = Math.floor(usableLength / (rackLengthFt + aisleFt));
   const numberOfRackRows = Math.floor(usableWidth / (rackDepthFt + intersectingFt));
+
   const totalRacks = rackCountPerRow * numberOfRackRows;
   const totalPallets = totalRacks * inputs.palletsPerLevel;
   const sqftUsed = (totalRacks * inputs.rackBeamLength * inputs.rackDepth) / 144;
@@ -131,12 +131,67 @@ export default function WarehousePlanner() {
       {/* Inputs panel */}
       <div>
         <h2 className="text-xl font-bold">Warehouse Inputs</h2>
-        {/* …same input form code… */}
+        {Object.entries(inputs).map(([key, val]) =>
+          key !== "equipmentType" ? (
+            <div key={key} className="mb-2">
+              <label className="block font-medium">
+                {key.replace(/([A-Z])/g, " $1")}
+              </label>
+              <input
+                type="number"
+                name={key}
+                value={val}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          ) : null
+        )}
+        <div className="mb-2">
+          <label className="block font-medium">Equipment Type</label>
+          <select
+            name="equipmentType"
+            value={inputs.equipmentType}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          >
+            {Object.keys(EQUIPMENT_TYPES).map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            Save Plan
+          </button>
+          <button
+            onClick={handleLoad}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Load Plan
+          </button>
+        </div>
       </div>
+
       {/* Results & 3D view */}
       <div>
         <h2 className="text-xl font-bold">Results</h2>
-        {/* …same results code… */}
+        <p>Total Racks: {totalRacks}</p>
+        <p>Total Pallets: {totalPallets}</p>
+        <p>Used Sq Ft: {sqftUsed.toFixed(2)}</p>
+        <p>Unused Sq Ft: {sqftUnused.toFixed(2)}</p>
+        {warnings.length > 0 && (
+          <div className="text-red-600">
+            {warnings.map((w, i) => (
+              <p key={i}>{w}</p>
+            ))}
+          </div>
+        )}
         <Warehouse3DView
           numberOfRackRows={numberOfRackRows}
           rackCountPerRow={rackCountPerRow}
