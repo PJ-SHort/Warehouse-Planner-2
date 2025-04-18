@@ -183,3 +183,4 @@ export default function WarehousePlanner() {
     </div>
   );
 }
+export default WarehousePlanner;
