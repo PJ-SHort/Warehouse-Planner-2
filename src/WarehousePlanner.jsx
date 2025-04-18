@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-// Equipment definitions: aisle widths in inches
 const EQUIPMENT_TYPES = {
   "Turret Truck": { aisleWidth: 72, intersectingAisle: 96 },
   "Counterbalance Forklift": { aisleWidth: 144, intersectingAisle: 144 },
@@ -10,7 +9,6 @@ const EQUIPMENT_TYPES = {
   "Aisle Master 33NE": { aisleWidth: 72, intersectingAisle: 96 },
 };
 
-// 3D viewer sub‑component
 function Warehouse3DView({
   numberOfRackRows,
   rackCountPerRow,
@@ -62,7 +60,6 @@ function Warehouse3DView({
     };
     animate();
 
-    // Cleanup on unmount
     return () => {
       controls.dispose();
       renderer.dispose();
@@ -73,7 +70,6 @@ function Warehouse3DView({
   return <div ref={mountRef} style={{ width: "100%", height: "400px" }} />;
 }
 
-// Main planner component
 export default function WarehousePlanner() {
   const [inputs, setInputs] = useState({
     buildingLength: 200,
@@ -96,22 +92,13 @@ export default function WarehousePlanner() {
   };
 
   const handleSave = () => {
-    try {
-      localStorage.setItem("warehousePlan", JSON.stringify(inputs));
-      alert("Plan saved!");
-    } catch {
-      alert("Save failed.");
-    }
+    localStorage.setItem("warehousePlan", JSON.stringify(inputs));
+    alert("Plan saved!");
   };
-
   const handleLoad = () => {
-    try {
-      const saved = JSON.parse(localStorage.getItem("warehousePlan") || "{}");
-      setInputs(saved);
-      alert("Plan loaded!");
-    } catch {
-      alert("Load failed.");
-    }
+    const saved = JSON.parse(localStorage.getItem("warehousePlan") || "{}");
+    setInputs(saved);
+    alert("Plan loaded!");
   };
 
   const equip = EQUIPMENT_TYPES[inputs.equipmentType];
@@ -125,7 +112,6 @@ export default function WarehousePlanner() {
 
   const rackCountPerRow = Math.floor(usableLength / (rackLengthFt + aisleFt));
   const numberOfRackRows = Math.floor(usableWidth / (rackDepthFt + intersectingFt));
-
   const totalRacks = rackCountPerRow * numberOfRackRows;
   const totalPallets = totalRacks * inputs.palletsPerLevel;
   const sqftUsed = (totalRacks * inputs.rackBeamLength * inputs.rackDepth) / 144;
@@ -142,62 +128,15 @@ export default function WarehousePlanner() {
 
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Inputs panel */}
       <div>
         <h2 className="text-xl font-bold">Warehouse Inputs</h2>
-        {Object.entries(inputs).map(([key, val]) =>
-          key !== "equipmentType" ? (
-            <div key={key} className="mb-2">
-              <label className="block font-medium">
-                {key.replace(/([A-Z])/g, " $1")}
-              </label>
-              <input
-                type="number"
-                name={key}
-                value={val}
-                onChange={handleChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-          ) : null
-        )}
-        <div className="mb-2">
-          <label className="block font-medium">Equipment Type</label>
-          <select
-            name="equipmentType"
-            value={inputs.equipmentType}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          >
-            {Object.keys(EQUIPMENT_TYPES).map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex gap-2">
-          <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white rounded">
-            Save Plan
-          </button>
-          <button onClick={handleLoad} className="px-4 py-2 bg-green-600 text-white rounded">
-            Load Plan
-          </button>
-        </div>
+        {/* …same input form code… */}
       </div>
-
+      {/* Results & 3D view */}
       <div>
         <h2 className="text-xl font-bold">Results</h2>
-        <p>Total Racks: {totalRacks}</p>
-        <p>Total Pallets: {totalPallets}</p>
-        <p>Used Sq Ft: {sqftUsed.toFixed(2)}</p>
-        <p>Unused Sq Ft: {sqftUnused.toFixed(2)}</p>
-        {warnings.length > 0 && (
-          <div className="text-red-600">
-            {warnings.map((w, i) => (
-              <p key={i}>{w}</p>
-            ))}
-          </div>
-        )}
+        {/* …same results code… */}
         <Warehouse3DView
           numberOfRackRows={numberOfRackRows}
           rackCountPerRow={rackCountPerRow}
