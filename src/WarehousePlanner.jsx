@@ -61,5 +61,6 @@ function Warehouse3DView({ inputs, numberOfRackRows, rackCountPerRow, rackLength
 
 // Write this code to file
 
+export default WarehousePlanner;
 
 
